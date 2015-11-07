@@ -15,16 +15,16 @@
     var sequence;
     //result is the result of calling yield {value:Promise, done:bool}
     var process = function(result) {
+      if(result.done){
+        return Promise.resolve(result.value);
+      }
+      
       result.value.then(
         function(value) {
-          if(!result.done) {
-            process(sequence.next(value))
-          }
+            process(sequence.next(value))         
         }, 
         function(error) {
-          if(!result.done) {
             process(sequence.throw(error));
-          }
       })
     }
 
